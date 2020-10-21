@@ -1,7 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { ListItem } from './ui/ListItem'
-import { TextField } from './ui/TextField'
-import { Spinner } from './ui/Spinner'
+import { ListItem, TextField, Spinner } from './ui'
 import { useTodoDispatch } from '../context/todoContext'
 
 function TodoForm() {
@@ -24,6 +22,7 @@ function TodoForm() {
 			console.error(error)
 		} finally {
 			setSubmitting(false)
+			inputRef.current.focus()
 		}
 	}
 
@@ -50,7 +49,7 @@ function TodoForm() {
 				onKeyDown={handleKeyDown}
 				disabled={submitting}
 			/>
-			{submitting && <Spinner size={24} fill='#585292' />}
+			{submitting && <Spinner size={24} fill='#9796A8' />}
 		</ListItem>
 	)
 }

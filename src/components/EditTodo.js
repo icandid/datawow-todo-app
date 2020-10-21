@@ -1,8 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { ListItem } from './ui/ListItem'
-import { TextField } from './ui/TextField'
-import { Spinner } from './ui/Spinner'
-import { LoaderButton } from './ui/LoaderButton'
+import { ListItem, TextField, LoaderButton } from './ui'
 import { useTodoDispatch } from '../context/todoContext'
 
 function EditTodo({ todo, onClose }) {

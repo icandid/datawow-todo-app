@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { motion } from 'framer-motion'
 import { FullPageLoading } from './FullPageLoading'
 import { TodoProgress } from './TodoProgress'
 import { TodoItem } from './TodoItem'
 import { TodoForm } from './TodoForm'
 import { EditTodo } from './EditTodo'
-import { Select } from './ui/Select'
-import { Option } from './ui/Option'
+import { Select, Option } from './ui'
 import { useTodoState, useTodoDispatch } from '../context/todoContext'
 import { getAll } from '../api'
 import { filteredTodo } from '../utils'
-
-function filterTodos(filter) {
-	console.log('apply filter', filter)
-}
 
 const Container = styled.div`
 	max-width: 800px;
@@ -38,7 +34,7 @@ function Todos() {
 	const [editTodoId, setEditTodoId] = useState()
 	const [filter, setFilter] = useState('All')
 	const { todos: _todos } = useTodoState()
-	const { init, updateTodo, removeTodo } = useTodoDispatch()
+	const { init, toggleComplete, removeTodo } = useTodoDispatch()
 	const filters = ['All', 'Done', 'Undone']
 
 	useEffect(() => {
@@ -48,11 +44,7 @@ function Todos() {
 			})
 			.catch(console.error)
 			.finally(() => setLoading(false))
-	}, [])
-
-	if (loading) {
-		return <FullPageLoading />
-	}
+	}, [init])
 
 	function handleRemove(id) {
 		return () => removeTodo(id)
@@ -62,16 +54,11 @@ function Todos() {
 		setEditTodoId(null)
 	}
 
-	function toggleComplete(todo) {
-		return () => {
-			updateTodo({
-				...todo,
-				completed: !todo.completed,
-			})
-		}
+	if (loading) {
+		return <FullPageLoading />
 	}
 
-	const todos = filteredTodo(_todos, filter)
+	const todos = _todos.length > 0 ? filteredTodo(_todos, filter) : []
 	return (
 		<Container>
 			<TodoProgress />
@@ -87,22 +74,53 @@ function Todos() {
 				</Select>
 			</Header>
 
-			{todos.map((todo) =>
-				editTodoId === todo.id ? (
-					<EditTodo key={todo.id} todo={todo} onClose={handleCloseEdit} />
-				) : (
-					<TodoItem
+			<motion.div
+				initial='hidden'
+				animate='visible'
+				variants={{
+					visible: {
+						transition: {
+							staggerChildren: 0.04,
+						},
+					},
+				}}
+			>
+				{todos.map((todo) => (
+					<motion.div
+						layout
+						initial='hidden'
+						animate='visible'
+						exit='hidden'
+						variants={{
+							hidden: {
+								opacity: 0,
+								x: 100,
+							},
+							visible: {
+								opacity: 1,
+								x: 0,
+							},
+						}}
 						key={todo.id}
-						complete={todo.completed}
-						title={todo.title}
-						onToggle={toggleComplete(todo)}
-						onRemove={handleRemove(todo.id)}
-						onEdit={() => setEditTodoId(todo.id)}
-					/>
-				)
-			)}
+					>
+						{editTodoId === todo.id ? (
+							<EditTodo todo={todo} onClose={handleCloseEdit} />
+						) : (
+							<TodoItem
+								complete={todo.completed}
+								title={todo.title}
+								onToggle={() => toggleComplete(todo)}
+								onRemove={handleRemove(todo.id)}
+								onEdit={() => setEditTodoId(todo.id)}
+							/>
+						)}
+					</motion.div>
+				))}
+			</motion.div>
 
-			<TodoForm />
+			<motion.div layout>
+				<TodoForm />
+			</motion.div>
 		</Container>
 	)
 }

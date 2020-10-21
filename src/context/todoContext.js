@@ -5,8 +5,8 @@ const TodoStateContext = React.createContext()
 const TodoDispatchContext = React.createContext()
 
 const actionTypes = {
-	start: 'START',
 	init: 'INITIAL',
+	start: 'START',
 	add: 'ADD_TODO',
 	update: 'UPDATE_TODO',
 	remove: 'REMOVE_TODO',
@@ -25,10 +25,14 @@ function todoReducer(state, action) {
 				...initialState,
 				todos: [...action.data],
 			}
+		case actionTypes.start:
+			return {
+				...state,
+				error: null,
+			}
 		case actionTypes.add:
 			return {
 				...state,
-				pending: false,
 				todos: [...state.todos, action.data],
 			}
 		case actionTypes.update:
@@ -61,11 +65,12 @@ function todoReducer(state, action) {
 const TodoProvider = ({ children }) => {
 	const [state, dispatch] = React.useReducer(todoReducer, initialState)
 
-	const init = (data) => {
+	const init = React.useCallback((data) => {
 		dispatch({ type: actionTypes.init, data })
-	}
+	}, [])
 
 	async function addTodo(title) {
+		dispatch({ type: actionTypes.start })
 		try {
 			const data = await TodoAPI.create(title)
 			dispatch({ type: actionTypes.add, data })
@@ -74,30 +79,29 @@ const TodoProvider = ({ children }) => {
 		}
 	}
 
-	async function toggleComplete(id) {
+	async function updateTodo(data) {
+		dispatch({ type: actionTypes.start })
+		const previous = state.todos.find((todo) => todo.id === data.id)
 		try {
-			const data = state.todos.find((todo) => todo.id === id)
-			data.completed = !data.completed
 			dispatch({ type: actionTypes.update, data })
 			await TodoAPI.update(data)
 		} catch (error) {
 			dispatch({ type: actionTypes.fail, error })
+			// rollback
+			dispatch({ type: actionTypes.update, data: previous })
 		}
 	}
 
-	async function updateTodo(data) {
-		try {
-			await TodoAPI.update(data)
-			dispatch({ type: actionTypes.update, data })
-		} catch (error) {
-			dispatch({ type: actionTypes.fail, error })
-		}
+	async function toggleComplete(todo) {
+		const data = { ...todo }
+		data.completed = !data.completed
+		await updateTodo(data)
 	}
 
 	async function removeTodo(id) {
 		try {
-			await TodoAPI.remove(id)
 			dispatch({ type: actionTypes.remove, id })
+			await TodoAPI.remove(id)
 		} catch (error) {
 			dispatch({ type: actionTypes.fail, error })
 		}

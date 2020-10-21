@@ -28,6 +28,7 @@ async function update({ id, ...body }) {
 		},
 		body: JSON.stringify(body),
 	})
+
 	return await response.json()
 }
 

@@ -25,7 +25,7 @@ function TodoProgress() {
 	const { todos } = useTodoState()
 	const total = todos.length
 	const completed = filteredTodo(todos, 'Done').length
-	const percentage = Math.round((completed / total) * 100)
+	const percentage = total > 0 ? Math.round((completed / total) * 100) : 0
 	return (
 		<Container>
 			<Title>Progress</Title>

@@ -1,10 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Checkbox } from './ui/Checkbox'
-import { ListItem } from './ui/ListItem'
-
-import { MenuItem } from './ui/MenuItem'
-import { PopupMenu } from './ui/PopupMenu'
+import { Checkbox, ListItem, MenuItem, PopupMenu } from './ui'
 
 const Title = styled.p`
 	flex: 1;
