@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const MenuItem = styled.div`
-	padding: var(--base-space) calc(var(--base-space) * 2);
+	padding: var(--base-space) calc(var(--base-space) * 2.5);
 	font-size: 0.95rem;
 	transition: opacity var(--base-transition-duration);
 	cursor: pointer;

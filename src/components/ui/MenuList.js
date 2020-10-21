@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 const MenuList = styled.div`
-	min-width: 10ch;
-	padding: var(--base-space) 0;
+	min-width: 11ch;
+	padding: calc(var(--base-space) * 2) 0;
 	border-radius: calc(var(--base-radius) * 2);
 	position: absolute;
 	background-color: var(--color-white);
