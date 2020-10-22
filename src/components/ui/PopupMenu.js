@@ -8,7 +8,7 @@ const Container = styled.div`
 	position: relative;
 `
 
-function PopupMenu({ children, align = 'left' }) {
+function PopupMenu({ children, align = 'left', ...props }) {
 	const [expand, setExpand] = React.useState(false)
 	const buttonRef = React.useRef()
 
@@ -21,8 +21,8 @@ function PopupMenu({ children, align = 'left' }) {
 	}
 
 	return (
-		<Container>
-			<IconButton onClick={toggleExpand} ref={buttonRef}>
+		<Container {...props}>
+			<IconButton onClick={toggleExpand} ref={buttonRef} role='icon-button'>
 				<svg fill='none' width='24' height='24' viewBox='0 0 24 24' stroke='#9796A8'>
 					<path
 						strokeLinecap='round'

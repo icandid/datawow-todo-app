@@ -1,28 +1,44 @@
 import { rest } from 'msw'
 
+const endpoint = `${process.env.REACT_APP_API_URL}/todos`
+
 const todos = [
 	{
-		id: '5fe3f4ca-193c-4170-83c1-cb5a19908601',
-		title: 'Buy food for dinner',
+		id: '1',
+		title: 'Buy a milk',
 		completed: true,
 	},
 	{
-		id: 'f619466c-a016-4281-b584-7db2795d103d',
-		title: 'Call Marie at 10.00 PM',
+		id: '2',
+		title: 'Clean my room',
 		completed: false,
 	},
 	{
-		id: 'a829434e-193c-4172-83c1-cb5a19975412',
-		title: 'Write a react blog post',
+		id: '3',
+		title: 'Read a book',
 		completed: false,
 	},
 ]
 
 export const handlers = [
-	rest.post('/toods', (req, res, ctx) => {
-		return res(ctx.status(200))
+	rest.post(endpoint, (req, res, ctx) => {
+		const newTodo = {
+			id: Date.now(),
+			...req.body,
+		}
+		return res(ctx.status(201), ctx.json(newTodo))
 	}),
-	rest.get('/todos', (req, res, ctx) => {
+
+	rest.get(endpoint, (_req, res, ctx) => {
 		return res(ctx.status(200), ctx.json(todos))
+	}),
+
+	rest.put(`${endpoint}/:id`, (req, res, ctx) => {
+		return res(ctx.status(200), ctx.json(req.body))
+	}),
+
+	rest.delete(`${endpoint}/:id`, (req, res, ctx) => {
+		// const { id } = req.params
+		return res(ctx.status(204))
 	}),
 ]

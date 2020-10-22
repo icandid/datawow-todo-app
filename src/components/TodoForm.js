@@ -6,17 +6,14 @@ function TodoForm() {
 	const inputRef = useRef()
 	const [title, setTitle] = useState('')
 	const [submitting, setSubmitting] = useState(false)
-	const { addTodo } = useTodoDispatch()
-
-	const ESCAPE_KEY = 27
-	const ENTER_KEY = 13
+	const { createTodo } = useTodoDispatch()
 
 	async function submit() {
 		if (submitting || title.trim() === '') return
 
 		try {
 			setSubmitting(true)
-			await addTodo(title)
+			await createTodo(title)
 			setTitle('')
 		} catch (error) {
 			console.error(error)
@@ -27,10 +24,10 @@ function TodoForm() {
 	}
 
 	function handleKeyDown(e) {
-		if (e.which === ESCAPE_KEY) {
+		if (e.key === 'Escape') {
 			setTitle('')
 			inputRef.current.blur()
-		} else if (e.which === ENTER_KEY) {
+		} else if (e.key === 'Enter') {
 			submit()
 		}
 	}

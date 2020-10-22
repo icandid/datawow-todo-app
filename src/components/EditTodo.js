@@ -8,9 +8,6 @@ function EditTodo({ todo, onClose }) {
 	const [submitting, setSubmitting] = useState(false)
 	const { updateTodo } = useTodoDispatch()
 
-	const ESCAPE_KEY = 27
-	const ENTER_KEY = 13
-
 	async function submit() {
 		if (submitting) return
 
@@ -33,9 +30,9 @@ function EditTodo({ todo, onClose }) {
 	}
 
 	function handleKeyDown(e) {
-		if (e.which === ESCAPE_KEY) {
+		if (e.key === 'Escape') {
 			onClose()
-		} else if (e.which === ENTER_KEY) {
+		} else if (e.key === 'Enter') {
 			submit()
 		}
 	}
@@ -48,6 +45,7 @@ function EditTodo({ todo, onClose }) {
 		<ListItem>
 			<TextField
 				ref={inputRef}
+				placeholder='Edit your todo...'
 				value={title}
 				onChange={handleChange}
 				onKeyDown={handleKeyDown}

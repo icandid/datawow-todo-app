@@ -30,7 +30,7 @@ const Options = styled.div`
 	z-index: 10;
 `
 
-function Select({ value, children }) {
+function Select({ value, children, role }) {
 	const [anchorEl, setAnchorEl] = React.useState()
 	const ref = React.useRef()
 
@@ -38,13 +38,13 @@ function Select({ value, children }) {
 		setAnchorEl(null)
 	})
 
-	function show(e) {
+	function expand(e) {
 		setAnchorEl(e.currentTarget)
 	}
 
 	return (
 		<Container>
-			<SelectValue onClick={show} ref={ref}>
+			<SelectValue onClick={expand} ref={ref} role={role}>
 				{value}
 				<svg fill='none' width='16' height='16' viewBox='0 0 24 24' stroke='#2e2e2e'>
 					<path

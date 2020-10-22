@@ -31,7 +31,7 @@ function TodoProgress() {
 			<Title>Progress</Title>
 			<ProgressBar value={percentage} />
 			<Label>
-				{completed} / {total} Completed
+				<span data-testid='completed-todos'>{completed}</span> / {total} Completed
 			</Label>
 		</Container>
 	)

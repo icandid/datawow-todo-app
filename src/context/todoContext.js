@@ -1,5 +1,5 @@
-import React from 'react'
-import * as TodoAPI from '../api'
+import React, { useReducer, useCallback } from 'react'
+import * as API from '../api'
 
 const TodoStateContext = React.createContext()
 const TodoDispatchContext = React.createContext()
@@ -63,16 +63,19 @@ function todoReducer(state, action) {
 }
 
 const TodoProvider = ({ children }) => {
-	const [state, dispatch] = React.useReducer(todoReducer, initialState)
+	const [state, dispatch] = useReducer(todoReducer, initialState)
 
-	const init = React.useCallback((data) => {
+	const init = useCallback((data) => {
 		dispatch({ type: actionTypes.init, data })
 	}, [])
 
-	async function addTodo(title) {
+	async function createTodo(title) {
 		dispatch({ type: actionTypes.start })
 		try {
-			const data = await TodoAPI.create(title)
+			const data = await API.create({
+				title,
+				completed: false,
+			})
 			dispatch({ type: actionTypes.add, data })
 		} catch (error) {
 			dispatch({ type: actionTypes.fail, error })
@@ -81,14 +84,14 @@ const TodoProvider = ({ children }) => {
 
 	async function updateTodo(data) {
 		dispatch({ type: actionTypes.start })
-		const previous = state.todos.find((todo) => todo.id === data.id)
+		const cache = state.todos.find((todo) => todo.id === data.id)
 		try {
 			dispatch({ type: actionTypes.update, data })
-			await TodoAPI.update(data)
+			await API.update(data)
 		} catch (error) {
 			dispatch({ type: actionTypes.fail, error })
 			// rollback
-			dispatch({ type: actionTypes.update, data: previous })
+			dispatch({ type: actionTypes.update, data: cache })
 		}
 	}
 
@@ -99,25 +102,28 @@ const TodoProvider = ({ children }) => {
 	}
 
 	async function removeTodo(id) {
+		dispatch({ type: actionTypes.start })
 		try {
+			await API.remove(id)
 			dispatch({ type: actionTypes.remove, id })
-			await TodoAPI.remove(id)
 		} catch (error) {
 			dispatch({ type: actionTypes.fail, error })
 		}
 	}
 
-	const actions = {
+	const dispatchValues = {
 		init,
-		addTodo,
-		toggleComplete,
+		createTodo,
 		updateTodo,
+		toggleComplete,
 		removeTodo,
 	}
 
 	return (
 		<TodoStateContext.Provider value={state}>
-			<TodoDispatchContext.Provider value={actions}>{children}</TodoDispatchContext.Provider>
+			<TodoDispatchContext.Provider value={dispatchValues}>
+				{children}
+			</TodoDispatchContext.Provider>
 		</TodoStateContext.Provider>
 	)
 }

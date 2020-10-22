@@ -39,8 +39,8 @@ function Todos() {
 
 	useEffect(() => {
 		getAll()
-			.then((tasks) => {
-				init(tasks)
+			.then((todos) => {
+				init(todos)
 			})
 			.catch(console.error)
 			.finally(() => setLoading(false))
@@ -65,7 +65,7 @@ function Todos() {
 
 			<Header>
 				<HeaderText>Tasks</HeaderText>
-				<Select value={filter}>
+				<Select value={filter} role='select'>
 					{filters.map((value) => (
 						<Option key={value} onClick={() => setFilter(value)}>
 							{value}
@@ -87,6 +87,8 @@ function Todos() {
 			>
 				{todos.map((todo) => (
 					<motion.div
+						key={todo.id}
+						role='todo'
 						layout
 						initial='hidden'
 						animate='visible'
@@ -101,13 +103,12 @@ function Todos() {
 								x: 0,
 							},
 						}}
-						key={todo.id}
 					>
 						{editTodoId === todo.id ? (
 							<EditTodo todo={todo} onClose={handleCloseEdit} />
 						) : (
 							<TodoItem
-								complete={todo.completed}
+								completed={todo.completed}
 								title={todo.title}
 								onToggle={() => toggleComplete(todo)}
 								onRemove={handleRemove(todo.id)}

@@ -11,11 +11,11 @@ const Title = styled.p`
 	line-height: 1.4;
 `
 
-function TodoItem({ title, complete, onToggle, onRemove, onEdit }) {
+function TodoItem({ title, completed, onToggle, onRemove, onEdit }) {
 	return (
 		<ListItem>
-			<Checkbox checked={complete} onClick={onToggle} />
-			<Title complete={complete}>{title}</Title>
+			<Checkbox checked={completed} role='checkbox' onClick={onToggle} />
+			<Title complete={completed}>{title}</Title>
 			<PopupMenu align='right'>
 				<MenuItem onClick={onEdit}>Edit</MenuItem>
 				<MenuItem onClick={onRemove}>Delete</MenuItem>
