@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.9",
+    "eslint-plugin-testing-library": "^3.9.2",
     "framer-motion": "^2.9.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
@@ -21,7 +22,18 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:testing-library/react"
+    ],
+    "plugins": [
+      "testing-library"
+    ],
+    "rules": {
+      "testing-library/await-async-query": "error",
+      "testing-library/no-await-sync-query": "error",
+      "testing-library/no-debug": "warn"
+    }
   },
   "browserslist": {
     "production": [
