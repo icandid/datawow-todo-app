@@ -13,15 +13,15 @@ function EditTodo({ todo, onClose }) {
 
 		if (todo.title === title) {
 			onClose()
+			return
 		}
 
 		try {
 			setSubmitting(true)
-			const updated = {
+			await updateTodo({
 				...todo,
 				title,
-			}
-			await updateTodo(updated)
+			})
 			onClose()
 		} catch (error) {
 			console.error(error)
@@ -57,6 +57,7 @@ function EditTodo({ todo, onClose }) {
 				loadingText='Saving...'
 				disabled={submitting}
 				style={{ marginRight: -10 }}
+				onClick={submit}
 			>
 				Save
 			</LoaderButton>
