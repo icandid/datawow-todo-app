@@ -45,6 +45,7 @@ function EditTodo({ todo, onClose }) {
 		<ListItem>
 			<TextField
 				ref={inputRef}
+				aria-label='edit-title'
 				placeholder='Edit your todo...'
 				value={title}
 				onChange={handleChange}

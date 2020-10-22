@@ -41,6 +41,7 @@ function TodoForm() {
 			<TextField
 				ref={inputRef}
 				placeholder='Add your todo...'
+				aria-label='title'
 				value={title}
 				onChange={handleChange}
 				onKeyDown={handleKeyDown}

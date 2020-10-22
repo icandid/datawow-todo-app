@@ -67,7 +67,7 @@ function Todos() {
 				<HeaderText>Tasks</HeaderText>
 				<Select value={filter} role='select'>
 					{filters.map((value) => (
-						<Option key={value} onClick={() => setFilter(value)}>
+						<Option role='option' key={value} onClick={() => setFilter(value)}>
 							{value}
 						</Option>
 					))}
@@ -75,6 +75,7 @@ function Todos() {
 			</Header>
 
 			<motion.div
+				role='list'
 				initial='hidden'
 				animate='visible'
 				variants={{
@@ -88,7 +89,7 @@ function Todos() {
 				{todos.map((todo) => (
 					<motion.div
 						key={todo.id}
-						role='todo'
+						role='listitem'
 						layout
 						initial='hidden'
 						animate='visible'

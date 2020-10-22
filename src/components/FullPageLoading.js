@@ -19,9 +19,11 @@ const Text = styled.p`
 
 function FullPageLoading() {
 	return (
-		<Container>
+		<Container data-testid='loading'>
 			<Spinner size={32} fill='#585292' />
-			<Text>Loading...</Text>
+			<Text role='alert' aria-busy='true'>
+				Loading...
+			</Text>
 		</Container>
 	)
 }

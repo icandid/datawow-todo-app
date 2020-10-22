@@ -14,11 +14,20 @@ const Title = styled.p`
 function TodoItem({ title, completed, onToggle, onRemove, onEdit }) {
 	return (
 		<ListItem>
-			<Checkbox checked={completed} role='checkbox' onClick={onToggle} />
+			<Checkbox
+				checked={completed}
+				role='checkbox'
+				aria-checked={completed}
+				onClick={onToggle}
+			/>
 			<Title complete={completed}>{title}</Title>
 			<PopupMenu align='right'>
-				<MenuItem onClick={onEdit}>Edit</MenuItem>
-				<MenuItem onClick={onRemove}>Delete</MenuItem>
+				<MenuItem role='button' onClick={onEdit}>
+					Edit
+				</MenuItem>
+				<MenuItem role='button' onClick={onRemove}>
+					Delete
+				</MenuItem>
 			</PopupMenu>
 		</ListItem>
 	)
