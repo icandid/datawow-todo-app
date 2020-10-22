@@ -58,7 +58,7 @@ test('create todo', async () => {
 	expect(await screen.findByText(/shopping/i)).toBeInTheDocument()
 })
 
-test('edit todo', async () => {
+test('edit todo by press enter', async () => {
 	render(<App />)
 	await waitForElementToBeRemoved(() => screen.getByText(/loading/i))
 	userEvent.click(screen.getAllByRole('icon-button')[0])
@@ -68,6 +68,19 @@ test('edit todo', async () => {
 		'{selectall}{backspace}Do something{enter}'
 	)
 	expect(await screen.findByText(/do something/i)).toBeInTheDocument()
+})
+
+test('edit todo by click save', async () => {
+	render(<App />)
+	await waitForElementToBeRemoved(() => screen.getByText(/loading/i))
+	userEvent.click(screen.getAllByRole('icon-button')[0])
+	userEvent.click(screen.getByText(/edit/i))
+	userEvent.type(
+		screen.getByPlaceholderText(/edit your todo/i),
+		'{selectall}{backspace}Do something else'
+	)
+	userEvent.click(screen.getByText(/save/i))
+	expect(await screen.findByText(/do something else/i)).toBeInTheDocument()
 })
 
 test('remove todo', async () => {
